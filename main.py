@@ -1,8 +1,12 @@
+import logging
 import speech_recognition as sr
 import pydub
 from pydub import AudioSegment
 from nltk import pos_tag
 import os
+
+# configure logging
+logging.basicConfig(filename='app.log', level=logging.DEBUG)
 
 # create a recognizer object
 r = sr.Recognizer()
@@ -22,14 +26,21 @@ try:
 
         # print the recognized text
         print(text)
+
+        # log the recognized text
+        logging.info('Recognized text: %s', text)
 except sr.UnknownValueError:
     print("Google Speech Recognition could not understand audio")
+    logging.error('Google Speech Recognition could not understand audio')
 except sr.RequestError as e:
     print("Could not request results from Google Speech Recognition service; {0}".format(e))
+    logging.error('Could not request results from Google Speech Recognition service; {0}'.format(e))
 except FileNotFoundError:
     print("File not found")
+    logging.error('File not found')
 except Exception as e:
     print("Error occurred: {0}".format(e))
+    logging.error('Error occurred: {0}'.format(e))
 finally:
     # delete the temporary file
     os.remove("temp.wav")
